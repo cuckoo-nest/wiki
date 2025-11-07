@@ -1,0 +1,7 @@
+# Ignore Obsidian's cache and workspace files
+.obsidian
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
