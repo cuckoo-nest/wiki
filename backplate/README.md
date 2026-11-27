@@ -10,3 +10,6 @@ The backplate is the wall-mounted base that connects to the signal lines from H
  - [Hardware](Hardware.md)
  - [Protocol](Protocol.md)
  - [Protocol Investigation](backplate/Protocol Investigation.md)
+ - [Heating control](Heating%20control.md): the switch command and the Heat Link
+ - [Sleep and wake-up](Sleep%20and%20wake.md): quiet mode and the wake-up signal
+

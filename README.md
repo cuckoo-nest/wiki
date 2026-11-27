@@ -6,4 +6,4 @@ Used to power the [Cuckoo](https://github.com/cuckoo-nest) project
 
 # Contents
  - [Backplate](backplate/README.md)
-
+ - [Alternative firmware](firmware/README.md)
