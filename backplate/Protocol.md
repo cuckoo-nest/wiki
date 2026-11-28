@@ -123,8 +123,8 @@ The client actively initiates the session and waits for a specific signal to pro
 2.  **Device -> Client**: The device responds with a burst of messages, the last of which is an ASCII "BRK".
 ```
 0001 msg "<version> <build timestamp "YYYY-MM-DD HH:MM:SS"> K"
-0004 FET presence
-0009 FET presence
+0004 wire state (13 bytes; called "FET presence" in earlier notes)
+0009 pin state (15 bytes)
 0001 msg "\*sense 06d1 06d0 0001 0001 0000 0000 0000 0001 06d9 06d8 06d8; detect 09d3 065c"
 0001 msg "BRK"
 ```
@@ -134,7 +134,7 @@ The client actively initiates the session and waits for a specific signal to pro
 **Phase 2: Client ACK & Info Gathering**
 The client acknowledges the burst and then rapidly gathers all static information from the device.
 1.  **Client -> Device (Rapid Volley)**: The client sends three commands back-to-back without waiting for individual responses:
-    *   `0x008f` (FET Presence ACK)
+    *   `0x008f` (wire ACK, earlier "FET Presence ACK"). **Its payload must be the 13 bytes of the `0x0004` message, echoed back.** With an empty payload the backplate still answers the queries below but never starts its sensors and ignores switch commands; see [Heating control](Heating%20control.md).
     *   `0x0083` (Periodic Status Request)
     *   `0x0090` (Get Mono/TFE ID)
 
@@ -172,6 +172,8 @@ This is the final, steady-state operation for receiving sensor data. It is an ac
 
 4.  **Periodic Data Behavior**: Sending the `0x0083` command, even repeatedly after the handshake is complete, does not automatically start a continuous stream of sensor data. This indicates that the initialization sequence only completes "Phase 1" (establishing a valid session). A "Phase 2" is likely required, where further commands must be sent to configure sensor thresholds or explicitly enable data reporting before the backplate will begin streaming periodic updates.
 
+    *Update (found with a capture of stock `nlclient` on firmware `AMBER_BP 1.0.26`):* no further configuration is needed. The stream did not start because `0x8f` was sent without payload. With the 13 bytes of `0x0004` echoed in `0x8f`, followed by the queries, `0xc0 00000000`, `0xa2` and `0xa3`, the backplate streams by itself.
+
 
 
 **Phase 2: Polling for Rich Sensor Data (Repeats ~30 seconds)**
@@ -201,7 +203,8 @@ This stream provides constant updates for presence and light, while the more det
 ### Other Observed Behaviors
 
 *   **Recovery/Re-Handshake**: The logs show that `nlclient` may occasionally send `0x00ff` (Reset) during normal operation, triggering a full re-handshake. This is likely an error recovery mechanism.
-*   **Miscellaneous Commands**: Other commands like `0x00b1` ("temperature lock") and `0x0082` (FET control) are sent in response to user interaction or system events.
+*   **Miscellaneous Commands**: Other commands like `0x00b1` ("temperature lock") and `0x0082` (circuit switch: `[circuit][state]`, answered by `0x0006`; see [Heating control](Heating%20control.md)) are sent in response to user interaction or system events.
+*   **Sleep**: `0x00a4` (wake-up mask) and `0x00a1` (quiet, with the maximum sleep time) are sent before the head unit suspends; see [Sleep and wake-up](Sleep%20and%20wake.md).
 
 
 

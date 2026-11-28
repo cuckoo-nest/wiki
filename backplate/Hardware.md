@@ -66,7 +66,8 @@ The UK / EU Backplate has 2 screw terminals for receiving power and facilitates 
 
 #### Wires
 
-- **T1** / **T2** Connected to T1/T2 terminals of the Heatlink
+- **T1** (-) Connected to T1 terminal of the Heatlink
+- **T2** (+) Connected to T2 terminal of the Heatlink
 
 ### Heatlink
 
@@ -88,7 +89,7 @@ When the display cannot find the Heatlink wired / wireless it will display an er
 |:--:|
 |Heatlink cover with instructions|
 
-- **T1** / **T2** Connected to the T1/T2 terminals of the backplane, supplies 12V DC
+- **T1** (-) / **T2** (+) Connected to the T1/T2 terminals of the backplane, supplies 12V DC
 - **N** / **L** Connected to mains power 100V-240VAC ( Neutral and Line )
 - **1** Response
 - **2** Common
