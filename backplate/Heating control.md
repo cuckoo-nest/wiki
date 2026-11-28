@@ -81,8 +81,9 @@ Observed log strings in `nlclient`:
   for with what the backplate reports.
 - "Clearing all switches" on a reset or disconnect.
 - Safety temperature settings are sent to the backplate ("SetSafetyTempSettings Enable ... Heat
-  ... Cool ... lockout"). Inferred: the backplate can switch heating by itself when the head
-  unit is asleep or dead. Not looked into further.
+  ... Cool ... lockout") as command `0x89`. Looked into since: the firmware of the backplate
+  ignores it, and what protects against a head unit that hangs is the backplate's watchdog. See
+  [Models, heating and cooling](Models,%20heating%20and%20cooling.md).
 
 `nlclient` also has a separate "heatlink controller" that never calls the backplate send
 function and logs OpenTherm registers. Inferred: that is the wireless path (802.15.4) to a Heat
